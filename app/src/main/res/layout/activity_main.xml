@@ -30,13 +30,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editTextNumberDecimal3"
+            android:id="@+id/et_include"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_weight="9"
             android:ems="10"
-            android:inputType="numberDecimal"
+            android:inputType="text"
+            android:digits="0123456789,"
+            android:hint="Enter numbers with commas"
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
@@ -61,37 +63,57 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/editTextNumberDecimal4"
+            android:id="@+id/et_exclude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="9"
             android:ems="10"
-            android:inputType="numberDecimal"
+            android:inputType="text"
+            android:digits="0123456789,"
+            android:hint="Enter numbers with commas"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_3"
         android:layout_width="382dp"
-        android:layout_height="120dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="60dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/layout_2">
+
+        <Button
+            android:id="@+id/button_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select File"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/button_generate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Generate"
+            android:layout_marginStart="10dp"
             app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="382dp"
+        android:layout_height="349dp"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:text="Result:" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
