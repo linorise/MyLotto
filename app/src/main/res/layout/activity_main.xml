@@ -81,10 +81,10 @@
         app:layout_constraintTop_toTopOf="@id/layout_2">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/button_generate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:text="Generate"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
