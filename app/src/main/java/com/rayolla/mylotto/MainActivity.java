@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mLottoList = null;
     private ArrayList<String> mGenList = null;
 
-    private Button button_generate;
-    private TextView tv_out;
+    private Button mB_generate;
+    private TextView mTV_out;
 
     private int mNumToGen = 0;
 
@@ -119,16 +119,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        button_generate = (Button) findViewById(R.id.button_generate);
-        button_generate.setOnClickListener(new View.OnClickListener() {
+        mB_generate = (Button) findViewById(R.id.button_generate);
+        mB_generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Integer> list = new ArrayList<>();
+                mTV_out.setText("");
+                mGenList.clear();
 
                 for (int i=0; i<mNumToGen; i++) {
+                    List<Integer> list = new ArrayList<>();
                     int count = 0;
+
                     do {
                         int num = getRand();
+
+                        if (isDuplicated(list, num)) {
+                            continue;
+                        }
+
                         list.add(num);
                         count++;
                     } while (count < 6);
@@ -136,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                     Collections.sort(list);
                     Log.d(TAG, "list:  " + list.toString());
 
-                    if (!checkDuplication(mLottoList, list)) {
+                    if (!checkDuplicationList(mLottoList, list)) {
                         mGenList.add(list.toString()+"\n");
                     }
 
@@ -147,12 +155,12 @@ public class MainActivity extends AppCompatActivity {
                     String data = mGenList.get(i).replace("[", "");
 
                     data = data.replace("]", "");
-                    tv_out.append(data);
+                    mTV_out.append(data);
                 }
             }
         });
 
-        button_generate.setEnabled(false);
+        mB_generate.setEnabled(false);
 
         Button button_select = (Button) findViewById(R.id.button_select);
         button_select.setOnClickListener(new View.OnClickListener() {
@@ -191,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        tv_out = (TextView) findViewById(R.id.tv_out);
+        mTV_out = (TextView) findViewById(R.id.tv_out);
     }
 
     @Override
@@ -219,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                 catch (IOException e) { e.printStackTrace(); }
             }
 
-            button_generate.setEnabled(true);
+            mB_generate.setEnabled(true);
         }
     }
 
@@ -256,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         return num;
     }
 
-    private boolean checkDuplication(ArrayList<String> lottoList, List<Integer> genList) {
+    private boolean checkDuplicationList(ArrayList<String> lottoList, List<Integer> genList) {
         String gen = "";
         for (int i=0; i<genList.size(); i++) {
 
@@ -275,10 +283,20 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i=0; i<lottoList.size(); i++) {
             String str = lottoList.get(i);
-            Log.d(TAG, String.format("#%d> %s=%s", i, str, gen));
+//            Log.d(TAG, String.format("#%d> %s=%s", i, str, gen));
 
             if (str.equals(gen)) {
                 Log.d(TAG, "Duplication found");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isDuplicated(List<Integer> list, int num) {
+        for (int n=0; n<list.size(); n++) {
+            if (list.get(n) == num) {
                 return true;
             }
         }
