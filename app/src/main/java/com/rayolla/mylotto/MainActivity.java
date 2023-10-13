@@ -15,8 +15,12 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -28,6 +32,8 @@ import android.widget.Toast;
 
 //import org.apache.poi.ss.usermodel.Sheet;
 //import org.apache.poi.ss.usermodel.Workbook;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -49,9 +55,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_FILE_REQUEST_CODE = 100;
 
     private ArrayList<String> mLottoList = null;
-    private List<Integer> mGenList = null;
+    private ArrayList<String> mGenList = null;
 
     private Button button_generate;
+    private TextView tv_out;
+
+    private int mNumToGen = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,19 +123,32 @@ public class MainActivity extends AppCompatActivity {
         button_generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int count = 0;
-//                List<Integer> list = new ArrayList<>();
+                List<Integer> list = new ArrayList<>();
 
-                do {
-                    int num = getRand();
-                    mGenList.add(num);
-                    count++;
-                } while (count < 6);
+                for (int i=0; i<mNumToGen; i++) {
+                    int count = 0;
+                    do {
+                        int num = getRand();
+                        list.add(num);
+                        count++;
+                    } while (count < 6);
 
-                Collections.sort(mGenList);
-                Log.d(TAG, "mGenList:  " + mGenList.toString());
+                    Collections.sort(list);
+                    Log.d(TAG, "list:  " + list.toString());
 
-                checkDuplication();
+                    if (!checkDuplication(mLottoList, list)) {
+                        mGenList.add(list.toString()+"\n");
+                    }
+
+                    list.clear();
+                }
+
+                for (int i=0; i<mNumToGen; i++) {
+                    String data = mGenList.get(i).replace("[", "");
+
+                    data = data.replace("]", "");
+                    tv_out.append(data);
+                }
             }
         });
 
@@ -141,20 +163,35 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mLottoList = new ArrayList<String>();
-        mGenList = new ArrayList<>();
+        mGenList = new ArrayList<String>();
 
-//        runOnUiThread(new Runnable() {
-//            public void run() {
-//                Toast.makeText(getApplicationContext(), "Select file", Toast.LENGTH_LONG).show();
-//
-//                try {
-//                    Thread.sleep(2000);
-//                }
-//                catch (Exception e) {e.printStackTrace();}
-//
-//                showFileChooser();
-//            }
-//        });
+        Spinner spinner = findViewById(R.id.spinner);
+//        String[] data = {"항목 1", "항목 2", "항목 3", "항목 4"};
+        String[] data = new String[100];
+        for (int i=0; i<data.length; i++) {
+            data[i] = Integer.toString(i+1);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = data[position];
+                Log.d(TAG, "selectedItem: " + selectedItem);
+
+                mNumToGen = Integer.parseInt(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        tv_out = (TextView) findViewById(R.id.tv_out);
     }
 
     @Override
@@ -219,15 +256,15 @@ public class MainActivity extends AppCompatActivity {
         return num;
     }
 
-    private boolean checkDuplication() {
+    private boolean checkDuplication(ArrayList<String> lottoList, List<Integer> genList) {
         String gen = "";
-        for (int i=0; i<mGenList.size(); i++) {
+        for (int i=0; i<genList.size(); i++) {
 
-            if (i != mGenList.size() - 1) {
-                gen += mGenList.get(i) + ",";
+            if (i != genList.size() - 1) {
+                gen += genList.get(i) + ",";
             }
             else {
-                gen += mGenList.get(i);
+                gen += genList.get(i);
             }
         }
 
@@ -236,8 +273,8 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "gen: " + gen);
 
-        for (int i=0; i<mLottoList.size(); i++) {
-            String str = mLottoList.get(i);
+        for (int i=0; i<lottoList.size(); i++) {
+            String str = lottoList.get(i);
             Log.d(TAG, String.format("#%d> %s=%s", i, str, gen));
 
             if (str.equals(gen)) {

@@ -92,13 +92,19 @@
             android:text="Select File"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/button_generate"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Generate"
             android:layout_marginStart="10dp"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:text="NumberToGenerate" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:entries="@array/spinner_items"/>
     </LinearLayout>
 
     <LinearLayout
@@ -108,12 +114,20 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.486">
 
-        <TextView
-            android:id="@+id/textView5"
+        <Button
+            android:id="@+id/button_generate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Result:" />
+            android:text="Generate"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
