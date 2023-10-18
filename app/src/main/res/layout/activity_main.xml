@@ -127,7 +127,14 @@
         <TextView
             android:id="@+id/tv_out"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="412dp"
             android:text="" />
+
+        <Button
+            android:id="@+id/button_analysis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Analysis"
+            app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

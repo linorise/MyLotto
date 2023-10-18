@@ -119,6 +119,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button button_select = (Button) findViewById(R.id.button_select);
+        button_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileChooser();
+            }
+        });
+
+        mLottoList = new ArrayList<String>();
+        mGenList = new ArrayList<String>();
+
+        Spinner spinner = findViewById(R.id.spinner);
+//        String[] data = {"항목 1", "항목 2", "항목 3", "항목 4"};
+        String[] data = new String[100];
+        for (int i=0; i<data.length; i++) {
+            data[i] = Integer.toString(i+1);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = data[position];
+                Log.d(TAG, "selectedItem: " + selectedItem);
+
+                mNumToGen = Integer.parseInt(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         mB_generate = (Button) findViewById(R.id.button_generate);
         mB_generate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,40 +199,15 @@ public class MainActivity extends AppCompatActivity {
 
         mB_generate.setEnabled(false);
 
-        Button button_select = (Button) findViewById(R.id.button_select);
-        button_select.setOnClickListener(new View.OnClickListener() {
+        Button button_analysis = (Button)findViewById(R.id.button_analysis);
+        button_analysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFileChooser();
-            }
-        });
-
-        mLottoList = new ArrayList<String>();
-        mGenList = new ArrayList<String>();
-
-        Spinner spinner = findViewById(R.id.spinner);
-//        String[] data = {"항목 1", "항목 2", "항목 3", "항목 4"};
-        String[] data = new String[100];
-        for (int i=0; i<data.length; i++) {
-            data[i] = Integer.toString(i+1);
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = data[position];
-                Log.d(TAG, "selectedItem: " + selectedItem);
-
-                mNumToGen = Integer.parseInt(selectedItem);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                Intent i = new Intent(Intent.ACTION_MAIN);
+                i.setClassName("com.rayolla.mylotto", "com.rayolla.mylotto.AnalysisActivity");
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                getApplicationContext().startActivity(i);
             }
         });
 
