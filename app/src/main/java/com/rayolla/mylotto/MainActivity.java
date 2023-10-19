@@ -203,10 +203,19 @@ public class MainActivity extends AppCompatActivity {
         button_analysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "list: " + mTV_out.getText().toString());
+                String winning_list_50 = "";
+
+                for (int i=0; i<50; i++) {
+                    winning_list_50 += mLottoList.get(i) + "\n";
+                }
+
                 Intent i = new Intent(Intent.ACTION_MAIN);
                 i.setClassName("com.rayolla.mylotto", "com.rayolla.mylotto.AnalysisActivity");
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                i.putExtra("gen_list", mTV_out.getText().toString());
+                i.putExtra("winning_list", winning_list_50);
                 getApplicationContext().startActivity(i);
             }
         });
