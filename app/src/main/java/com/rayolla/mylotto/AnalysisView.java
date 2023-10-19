@@ -24,7 +24,8 @@ public class AnalysisView extends View {
 
     private int mMaxY = 0;
 
-    private String mWinningList;
+    private String mWinningList = "";
+    private String mGenList = "";
 
     private Canvas mCanvas;
 
@@ -244,6 +245,10 @@ public class AnalysisView extends View {
         mWinningList = list;
     }
 
+    public void setGeneratedList(String list) {
+        mGenList = list;
+    }
+
     private void drawWinningList() {
         if (mWinningList.length() == 0) {
             Log.d(TAG, "Winning list is empty!");
@@ -251,7 +256,7 @@ public class AnalysisView extends View {
         }
 
         String[] lines = mWinningList.split("\n");
-        int n = 2;
+        int n = 2;  // second row. first is for generated number.
         for (String line : lines) {
             drawPoint(mCanvas, Color.BLACK, line, n * START_X);
             n++;
