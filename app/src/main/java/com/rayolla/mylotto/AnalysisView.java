@@ -26,6 +26,7 @@ public class AnalysisView extends View {
 
     private String mWinningList = "";
     private String mGenList = "";
+    private String mFocusedList = "";
 
     private Canvas mCanvas;
 
@@ -40,6 +41,8 @@ public class AnalysisView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        Log.d(TAG, "onDraw");
 
         mCanvas = canvas;
 
@@ -107,6 +110,8 @@ public class AnalysisView extends View {
 //        for (int i=1; i<=45; i++) {
 //            drawPoint(canvas, 30, 30*i);
 //        }
+
+        drawFocusedList();
     }
 
     private void drawX(Canvas canvas) {
@@ -218,17 +223,18 @@ public class AnalysisView extends View {
     private void drawPoint(Canvas canvas, int color, String list, int startPos) {
         Paint paint = new Paint();
         paint.setStrokeWidth(18);
+        paint.setColor(color);
 
         String tok="";
         StringTokenizer st = new StringTokenizer(list, ",");
         int n = 0;
         int[] data = {0,0,0,0,0,0};
 
-        Log.d(TAG, list);
+//        Log.d(TAG, list);
 
         while (st.hasMoreTokens()) {
             tok = st.nextToken();
-            Log.d(TAG, "tok: " + tok);
+//            Log.d(TAG, "tok: " + tok);
 
             if (tok != null) {
                 data[n] = Integer.parseInt(tok);
@@ -249,11 +255,17 @@ public class AnalysisView extends View {
         mGenList = list;
     }
 
+    public void setFocusedList(String focused) {
+        mFocusedList = focused;
+    }
+
     private void drawWinningList() {
         if (mWinningList.length() == 0) {
             Log.d(TAG, "Winning list is empty!");
             return;
         }
+
+        Log.d(TAG, "Draw winning list");
 
         String[] lines = mWinningList.split("\n");
         int n = 2;  // second row. first is for generated number.
@@ -261,5 +273,26 @@ public class AnalysisView extends View {
             drawPoint(mCanvas, Color.BLACK, line, n * START_X);
             n++;
         }
+    }
+
+    private void drawFocusedList() {
+        if (mFocusedList.length() == 0) {
+
+            if (mGenList.length() > 0) {
+                String[] lines = mGenList.split("\n");
+                for (String line : lines) {
+                    mFocusedList = line;
+                    break;
+                }
+            }
+            else {
+                Log.d(TAG, "Focused list is empty!");
+                return;
+            }
+        }
+
+        Log.d(TAG, "Draw focused list. " + mFocusedList);
+
+        drawPoint(mCanvas, Color.RED, mFocusedList, START_X);
     }
 }

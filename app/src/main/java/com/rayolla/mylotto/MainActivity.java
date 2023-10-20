@@ -192,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
                     String data = mGenList.get(i).replace("[", "");
 
                     data = data.replace("]", "");
+                    data = data.replace(" ", "");
                     mTV_out.append(data);
                 }
             }

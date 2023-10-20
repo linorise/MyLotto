@@ -22,6 +22,8 @@ public class AnalysisActivity extends AppCompatActivity {
     private int mFocus = 0;
     private String[] mGenList = null;
 
+    AnalysisView mAnalysisView = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +35,8 @@ public class AnalysisActivity extends AppCompatActivity {
         Log.d(TAG, "genList: " + genList);
         Log.d(TAG, "winningList: " + winningList);
 
-        AnalysisView analysisView = (AnalysisView) findViewById(R.id.analysisview);
-        analysisView.setWinningList(winningList);
+        mAnalysisView = (AnalysisView) findViewById(R.id.analysisview);
+        mAnalysisView.setWinningList(winningList);
 
         if (genList.length() > 0) {
             TextView textView = (TextView) findViewById(R.id.tv_genlist);
@@ -46,7 +48,7 @@ public class AnalysisActivity extends AppCompatActivity {
             for (String line : lines) {
                 String dataStr = "";
                 if (n == 0) {
-                    analysisView.setGeneratedList(line);
+                    mAnalysisView.setGeneratedList(line);
                     dataStr = "<font color='#FF0000'>" + line + "</font><br>";
 
                     mFocus = n;
@@ -77,7 +79,7 @@ public class AnalysisActivity extends AppCompatActivity {
                 for (String line : mGenList) {
                     String dataStr = "";
                     if (n == mFocus) {
-                        analysisView.setGeneratedList(line);
+                        mAnalysisView.setFocusedList(line);
                         dataStr = "<font color='#FF0000'>" + line + "</font><br>";
                     }
                     else {
@@ -86,6 +88,8 @@ public class AnalysisActivity extends AppCompatActivity {
                     textView.append(Html.fromHtml(dataStr, Html.FROM_HTML_MODE_COMPACT));
                     n++;
                 }
+
+                mAnalysisView.invalidate();
             }
         });
 
