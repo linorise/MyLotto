@@ -214,7 +214,22 @@ public class MainActivity extends AppCompatActivity {
         mButtonWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getWeightStatistics();
+                calculateWeightStatistics();
+                printWeightStatistics();
+
+                String winning_list_50 = "";
+
+                for (int i=0; i<USE_NUM_OF_WINNING; i++) {
+                    winning_list_50 += mLottoList.get(i) + "\n";
+                }
+
+                Intent i = new Intent(Intent.ACTION_MAIN);
+                i.setClassName("com.rayolla.mylotto", "com.rayolla.mylotto.WeightActivity");
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                i.putExtra("gen_list", mTV_out.getText().toString());
+                i.putExtra("winning_list", winning_list_50);
+                getApplicationContext().startActivity(i);
             }
         });
 
@@ -349,11 +364,9 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private void getWeightStatistics() {
+    private void calculateWeightStatistics() {
         for (int i=0; i<USE_NUM_OF_WINNING; i++) {
             String list = mLottoList.get(i);
-
-            Log.d(TAG, "aaa list: " + list);
 
             String[] numbers = list.split(",");
             for (String number : numbers) {
@@ -370,8 +383,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
-        printWeightStatistics();
     }
 
     private void printWeightStatistics() {

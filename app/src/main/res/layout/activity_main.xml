@@ -101,7 +101,7 @@
 
         <Spinner
             android:id="@+id/spinner"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
             android:entries="@array/spinner_items"/>
@@ -134,7 +134,7 @@
         <TextView
             android:id="@+id/tv_out"
             android:layout_width="match_parent"
-            android:layout_height="412dp"
+            android:layout_height="400dp"
             android:text="" />
 
         <Button
@@ -143,6 +143,7 @@
             android:layout_height="wrap_content"
             android:text="Analysis"
             app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
             android:enabled="false"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
