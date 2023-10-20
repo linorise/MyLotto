@@ -53,14 +53,19 @@ import jxl.read.biff.BiffException;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyLotto_MainActivity";
     private static final int PICK_FILE_REQUEST_CODE = 100;
+    private static final int USE_NUM_OF_WINNING = 50;
+    private static final int TOTAL_NUM = 45;
 
     private ArrayList<String> mLottoList = null;
     private ArrayList<String> mGenList = null;
 
-    private Button mB_generate;
+    private Button mButtonGenerate;
+    private Button mButtonAnalysis;
+    private Button mButtonWeight;
     private TextView mTV_out;
 
     private int mNumToGen = 0;
+    private int[] mWeightPerNum = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showFileChooser();
+
+                mButtonWeight.setEnabled(true);
             }
         });
 
@@ -156,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mB_generate = (Button) findViewById(R.id.button_generate);
-        mB_generate.setOnClickListener(new View.OnClickListener() {
+        mButtonGenerate = (Button) findViewById(R.id.button_generate);
+        mButtonGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mTV_out.setText("");
@@ -195,19 +202,30 @@ public class MainActivity extends AppCompatActivity {
                     data = data.replace(" ", "");
                     mTV_out.append(data);
                 }
+
+                mButtonAnalysis.setEnabled(true);
             }
         });
 
-        mB_generate.setEnabled(false);
+        mButtonGenerate.setEnabled(false);
 
-        Button button_analysis = (Button)findViewById(R.id.button_analysis);
-        button_analysis.setOnClickListener(new View.OnClickListener() {
+
+        mButtonWeight = (Button) findViewById(R.id.button_weight);
+        mButtonWeight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getWeightStatistics();
+            }
+        });
+
+        mButtonAnalysis = (Button)findViewById(R.id.button_analysis);
+        mButtonAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "list: " + mTV_out.getText().toString());
                 String winning_list_50 = "";
 
-                for (int i=0; i<50; i++) {
+                for (int i=0; i<USE_NUM_OF_WINNING; i++) {
                     winning_list_50 += mLottoList.get(i) + "\n";
                 }
 
@@ -222,6 +240,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mTV_out = (TextView) findViewById(R.id.tv_out);
+
+        mWeightPerNum = new int[TOTAL_NUM];
+        for (int i=0; i<mWeightPerNum.length; i++) {
+            mWeightPerNum[i] = 0;
+        }
     }
 
     @Override
@@ -249,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 catch (IOException e) { e.printStackTrace(); }
             }
 
-            mB_generate.setEnabled(true);
+            mButtonGenerate.setEnabled(true);
         }
     }
 
@@ -324,5 +347,36 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    private void getWeightStatistics() {
+        for (int i=0; i<USE_NUM_OF_WINNING; i++) {
+            String list = mLottoList.get(i);
+
+            Log.d(TAG, "aaa list: " + list);
+
+            String[] numbers = list.split(",");
+            for (String number : numbers) {
+                try {
+                    int num = Integer.parseInt(number);
+                    if ((num - 1) >= 0 && (num - 1) < TOTAL_NUM) {
+                        mWeightPerNum[num - 1] += 1;
+                    }
+                    else {
+                        Log.d(TAG, "Buffer overflow! num:" + num);
+                    }
+                } catch (NumberFormatException e) {
+                    Log.w(TAG, "It's not number !");
+                }
+            }
+        }
+
+        printWeightStatistics();
+    }
+
+    private void printWeightStatistics() {
+        for (int i=0; i<mWeightPerNum.length; i++) {
+            Log.d(TAG, (i+1) + ": " + mWeightPerNum[i]);
+        }
     }
 }

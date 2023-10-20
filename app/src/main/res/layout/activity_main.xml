@@ -97,14 +97,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="NumberToGenerate" />
+            android:text="Generate" />
 
         <Spinner
             android:id="@+id/spinner"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
             android:entries="@array/spinner_items"/>
+
+        <Button
+            android:id="@+id/button_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weight"
+            android:enabled="false"/>
     </LinearLayout>
 
     <LinearLayout
@@ -135,6 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Analysis"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:enabled="false"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
