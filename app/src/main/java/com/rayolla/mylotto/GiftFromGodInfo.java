@@ -65,7 +65,7 @@ public class GiftFromGodInfo {
 
         try {
             for (int i = 0; i < mWeightPerNum.length; i++) {
-                Log.d(TAG, (i + 1) + ": " + mWeightPerNum[i]);
+//                Log.d(TAG, (i + 1) + ": " + mWeightPerNum[i]);
 
                 String str = (i + 1) + ": " + mWeightPerNum[i] + "\n";
                 if (i < 25) {
@@ -79,5 +79,13 @@ public class GiftFromGodInfo {
             Log.w(TAG, "Null check !");
             e.printStackTrace();
         }
+    }
+
+    public static int[] getTotalWeightTable() {
+        if (mWeightPerNum == null) {
+            Log.w(TAG, "Weight per number is null !");
+        }
+
+        return mWeightPerNum;
     }
 }

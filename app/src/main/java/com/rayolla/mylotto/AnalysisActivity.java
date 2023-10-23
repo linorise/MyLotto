@@ -34,14 +34,16 @@ public class AnalysisActivity extends AppCompatActivity {
         String winningList = getIntent().getStringExtra("winning_list");
 
         Log.d(TAG, "genList: " + genList);
-        Log.d(TAG, "winningList: " + winningList);
+//        Log.d(TAG, "winningList: " + winningList);
+
+        GiftFromGodInfo.calculateWeightStatistics(winningList);
+//        GiftFromGodInfo.printWeightStatistics();
 
         mAnalysisView = (AnalysisView) findViewById(R.id.analysisview);
         mAnalysisView.setWinningList(winningList);
 
         if (genList.length() > 0) {
             TextView textView = (TextView) findViewById(R.id.tv_genlist);
-//            textView.setText(genList);
 
             String[] lines = genList.split("\n");
             mGenList = lines;
@@ -53,6 +55,7 @@ public class AnalysisActivity extends AppCompatActivity {
                     dataStr = "<font color='#FF0000'>" + line + "</font><br>";
 
                     mFocus = n;
+                    setWeightInfo(line);
                 }
                 else {
                     dataStr = line + "<br>";
@@ -66,11 +69,11 @@ public class AnalysisActivity extends AppCompatActivity {
         button_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView textView = (TextView) findViewById(R.id.tv_genlist);
+                TextView tv_genlist = (TextView) findViewById(R.id.tv_genlist);
                 int n = 0;
 
                 mFocus++;
-                textView.setText("");
+                tv_genlist.setText("");
 
                 Log.d(TAG, "len: " + mGenList.length);
                 if (mFocus >= mGenList.length) {
@@ -82,11 +85,14 @@ public class AnalysisActivity extends AppCompatActivity {
                     if (n == mFocus) {
                         mAnalysisView.setFocusedList(line);
                         dataStr = "<font color='#FF0000'>" + line + "</font><br>";
+
+                        // set weight
+                        setWeightInfo(line);
                     }
                     else {
                         dataStr = line + "<br>";
                     }
-                    textView.append(Html.fromHtml(dataStr, Html.FROM_HTML_MODE_COMPACT));
+                    tv_genlist.append(Html.fromHtml(dataStr, Html.FROM_HTML_MODE_COMPACT));
                     n++;
                 }
 
@@ -105,5 +111,14 @@ public class AnalysisActivity extends AppCompatActivity {
         });
 
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    private void setWeightInfo(String list) {
+        WeightInfo.init(list);
+        WeightInfo.setTotalWeightTable(GiftFromGodInfo.getTotalWeightTable());
+
+        TextView tv_total_score = (TextView) findViewById(R.id.tv_total_score);
+        String info = "Total: " + WeightInfo.getWeightSum() + "\n";
+        tv_total_score.setText(info);
     }
 }

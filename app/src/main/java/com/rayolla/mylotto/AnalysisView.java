@@ -117,10 +117,6 @@ public class AnalysisView extends View {
 //        }
 
         drawFocusedList();
-
-        GiftFromGodInfo.calculateWeightStatistics(mWinningList);
-        GiftFromGodInfo.printWeightStatistics();
-
     }
 
     @Override
@@ -248,11 +244,11 @@ public class AnalysisView extends View {
         int n = 0;
         int[] data = {0,0,0,0,0,0};
 
-        Log.d(TAG, "draw list: " + list);
+//        Log.d(TAG, "draw list: " + list);
 
         while (st.hasMoreTokens()) {
             tok = st.nextToken();
-            Log.d(TAG, "tok: " + tok);
+//            Log.d(TAG, "tok: " + tok);
 
             if (tok != null) {
                 // bonus could be included
