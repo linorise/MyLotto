@@ -117,7 +117,7 @@ public class AnalysisView extends View {
 //        }
 
         drawFocusedList();
-//        calculateWeightStatistics();
+
         GiftFromGodInfo.calculateWeightStatistics(mWinningList);
         GiftFromGodInfo.printWeightStatistics();
 
@@ -320,43 +320,4 @@ public class AnalysisView extends View {
     public String getFocusedList() {
         return mFocusedList;
     }
-
-//    private void calculateWeightStatistics() {
-//        int winningNum = 0;
-//
-//        Log.d(TAG, "Calculate weight");
-//
-//        String [] lists = mWinningList.split("\n");
-//        for (String list : lists) {
-//            winningNum++;
-//        }
-//
-//        Log.d(TAG, "winningNum: " + winningNum);
-//        mWeightPerNum = new int[winningNum];
-//        for (int i=0; i<mWeightPerNum.length; i++) {
-//            mWeightPerNum[i] = 0;
-//        }
-//
-//        for (String list : lists) {
-//            String[] numbers = list.split(",");
-//            for (String number : numbers) {
-//                try {
-//                    int num = Integer.parseInt(number);
-//                    if ((num - 1) >= 0 && (num - 1) < TOTAL_NUM) {
-//                        mWeightPerNum[num - 1] += 1;
-//                    } else {
-//                        Log.d(TAG, "Buffer overflow! num:" + num);
-//                    }
-//                } catch (NumberFormatException e) {
-//                    Log.w(TAG, "It's not number !");
-//                }
-//            }
-//        }
-//    }
-//
-//    private void printWeightStatistics() {
-//        for (int i=0; i<mWeightPerNum.length; i++) {
-//            Log.d(TAG, (i+1) + ": " + mWeightPerNum[i]);
-//        }
-//    }
 }

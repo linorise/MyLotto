@@ -22,9 +22,10 @@ public class GiftFromGodInfo {
 
         if (mWeightPerNum == null) {
             mWeightPerNum = new int[TOTAL_NUM];
-            for (int i = 0; i < mWeightPerNum.length; i++) {
-                mWeightPerNum[i] = 0;
-            }
+        }
+
+        for (int i = 0; i < mWeightPerNum.length; i++) {
+            mWeightPerNum[i] = 0;
         }
 
         String [] lists = totList.split("\n");
