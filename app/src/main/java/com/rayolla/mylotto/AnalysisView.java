@@ -123,8 +123,8 @@ public class AnalysisView extends View {
         int stopX = START_X;
         int stopY = START_Y + (mYNum-1)*DEFAULT_LINE_INTERVAL;
 
-        Log.d(TAG, "drawX:");
-        Log.d(TAG, "startX   startY   stopX   stopY");
+//        Log.d(TAG, "drawX:");
+//        Log.d(TAG, "startX   startY   stopX   stopY");
         for (int i=0; i<mXNum; i++) {
             boolean dot = false;
             boolean thick = false;
@@ -135,7 +135,7 @@ public class AnalysisView extends View {
 
             if (i != 0) {
                 if (i%10 != 0 && i%5 == 0) {
-                    Log.d(TAG, "i: " + i);
+//                    Log.d(TAG, "i: " + i);
                     dot = true;
                 }
 
@@ -154,7 +154,7 @@ public class AnalysisView extends View {
                 paint.setColor(Color.RED);
             }
 
-            Log.d(TAG, String.format("%d   %d   %d   %d", startX + (i*DEFAULT_LINE_INTERVAL), startY, stopX + (i*DEFAULT_LINE_INTERVAL), stopY));
+//            Log.d(TAG, String.format("%d   %d   %d   %d", startX + (i*DEFAULT_LINE_INTERVAL), startY, stopX + (i*DEFAULT_LINE_INTERVAL), stopY));
             canvas.drawLine(startX + (i*DEFAULT_LINE_INTERVAL), startY, stopX + (i*DEFAULT_LINE_INTERVAL), stopY, paint);
         }
     }
@@ -170,8 +170,8 @@ public class AnalysisView extends View {
         int i;
         int count = 0;
 
-        Log.d(TAG, "drawY:");
-        Log.d(TAG, "startX   startY   stopX   stopY");
+//        Log.d(TAG, "drawY:");
+//        Log.d(TAG, "startX   startY   stopX   stopY");
         for (i=mYNum-1; i>=0; i--) {
             boolean dot = false;
             boolean thick = false;
@@ -207,7 +207,7 @@ public class AnalysisView extends View {
                 paint.setColor(Color.BLUE);
             }
 
-            Log.d(TAG, String.format("%d   %d   %d   %d", startX, startY + (i*DEFAULT_LINE_INTERVAL), stopX, stopY + (i*DEFAULT_LINE_INTERVAL)));
+//            Log.d(TAG, String.format("%d   %d   %d   %d", startX, startY + (i*DEFAULT_LINE_INTERVAL), stopX, stopY + (i*DEFAULT_LINE_INTERVAL)));
             canvas.drawLine(startX, startY + (i*DEFAULT_LINE_INTERVAL), stopX, stopY + (i*DEFAULT_LINE_INTERVAL), paint);
 
             count++;
@@ -230,15 +230,18 @@ public class AnalysisView extends View {
         int n = 0;
         int[] data = {0,0,0,0,0,0};
 
-//        Log.d(TAG, list);
+        Log.d(TAG, "draw list: " + list);
 
         while (st.hasMoreTokens()) {
             tok = st.nextToken();
-//            Log.d(TAG, "tok: " + tok);
+            Log.d(TAG, "tok: " + tok);
 
             if (tok != null) {
-                data[n] = Integer.parseInt(tok);
-                n++;
+                // bonus could be included
+                if (n < 6) {
+                    data[n] = Integer.parseInt(tok);
+                    n++;
+                }
             }
         }
 
