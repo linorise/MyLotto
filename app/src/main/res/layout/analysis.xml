@@ -17,6 +17,13 @@
             android:layout_height="wrap_content"
             android:text="" />
 
+        <TextView
+            android:id="@+id/tv_total_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="총점: 100\n 1-x\n 2-x\n 3-x\n 4-x\n 5-x\n 6-x\n" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

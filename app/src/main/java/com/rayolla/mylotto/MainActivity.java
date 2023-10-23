@@ -214,8 +214,6 @@ public class MainActivity extends AppCompatActivity {
         mButtonWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calculateWeightStatistics();
-                printWeightStatistics();
 
                 String winning_list_50 = "";
 
@@ -362,32 +360,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return false;
-    }
-
-    private void calculateWeightStatistics() {
-        for (int i=0; i<USE_NUM_OF_WINNING; i++) {
-            String list = mLottoList.get(i);
-
-            String[] numbers = list.split(",");
-            for (String number : numbers) {
-                try {
-                    int num = Integer.parseInt(number);
-                    if ((num - 1) >= 0 && (num - 1) < TOTAL_NUM) {
-                        mWeightPerNum[num - 1] += 1;
-                    }
-                    else {
-                        Log.d(TAG, "Buffer overflow! num:" + num);
-                    }
-                } catch (NumberFormatException e) {
-                    Log.w(TAG, "It's not number !");
-                }
-            }
-        }
-    }
-
-    private void printWeightStatistics() {
-        for (int i=0; i<mWeightPerNum.length; i++) {
-            Log.d(TAG, (i+1) + ": " + mWeightPerNum[i]);
-        }
     }
 }

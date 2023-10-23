@@ -21,6 +21,7 @@ public class AnalysisActivity extends AppCompatActivity {
 
     private int mFocus = 0;
     private String[] mGenList = null;
+    private String mPickedList = "";
 
     AnalysisView mAnalysisView = null;
 
@@ -90,6 +91,16 @@ public class AnalysisActivity extends AppCompatActivity {
                 }
 
                 mAnalysisView.invalidate();
+            }
+        });
+
+        Button button_pick = (Button) findViewById(R.id.button_pick);
+        button_pick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPickedList += mAnalysisView.getFocusedList() + "\n";
+
+                Log.d(TAG, "Your picked list: " + mPickedList);
             }
         });
 
