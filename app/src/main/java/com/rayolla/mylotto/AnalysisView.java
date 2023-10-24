@@ -294,7 +294,6 @@ public class AnalysisView extends View {
 
     private void drawFocusedList() {
         if (mFocusedList.length() == 0) {
-
             if (mGenList.length() > 0) {
                 String[] lines = mGenList.split("\n");
                 for (String line : lines) {

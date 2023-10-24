@@ -55,6 +55,7 @@ public class AnalysisActivity extends AppCompatActivity {
                     dataStr = "<font color='#FF0000'>" + line + "</font><br>";
 
                     mFocus = n;
+                    mAnalysisView.setFocusedList(line);
                     setWeightInfo(line);
                 }
                 else {
@@ -114,11 +115,32 @@ public class AnalysisActivity extends AppCompatActivity {
     }
 
     private void setWeightInfo(String list) {
+        Log.d(TAG, "Set weight info");
+
         WeightInfo.init(list);
         WeightInfo.setTotalWeightTable(GiftFromGodInfo.getTotalWeightTable());
 
         TextView tv_total_score = (TextView) findViewById(R.id.tv_total_score);
-        String info = "Total: " + WeightInfo.getWeightSum() + "\n";
-        tv_total_score.setText(info);
+        String info = "Total: " + WeightInfo.getListWeightSum() + "\n";
+        String[] infos = new String[6];
+        int n = 0;
+
+        String focused = mAnalysisView.getFocusedList();
+        String[] numbers = focused.split(",");
+        for (String number : numbers) {
+            try {
+                int num = Integer.parseInt(number);
+                int weight = WeightInfo.getWeightFromTotalTable(num-1);
+                infos[n++] = num + ": " + weight + "\n";
+            } catch (NumberFormatException e) {
+                Log.w(TAG, "It's not number !");
+            }
+        }
+
+        String total = "";
+        for (int i = 0; i<infos.length; i++) {
+            total += infos[i];
+        }
+        tv_total_score.setText(info + total);
     }
 }
