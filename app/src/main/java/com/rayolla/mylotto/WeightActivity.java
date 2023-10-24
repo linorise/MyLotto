@@ -46,7 +46,7 @@ public class WeightActivity extends AppCompatActivity {
         mTV_weight1 = (TextView) findViewById(R.id.tv_weight1);
         mTV_weight2 = (TextView) findViewById(R.id.tv_weight2);
 
-        GiftFromGodInfo.calculateWeightStatistics(mWinningList);
+//        GiftFromGodInfo.calculateWeight(mWinningList);
         GiftFromGodInfo.printWeightStatistics(mTV_weight1, mTV_weight2);
     }
 }

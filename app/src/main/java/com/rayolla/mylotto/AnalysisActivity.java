@@ -36,7 +36,7 @@ public class AnalysisActivity extends AppCompatActivity {
         Log.d(TAG, "genList: " + genList);
 //        Log.d(TAG, "winningList: " + winningList);
 
-        GiftFromGodInfo.calculateWeightStatistics(winningList);
+//        GiftFromGodInfo.calculateWeight(winningList);
 //        GiftFromGodInfo.printWeightStatistics();
 
         mAnalysisView = (AnalysisView) findViewById(R.id.analysisview);

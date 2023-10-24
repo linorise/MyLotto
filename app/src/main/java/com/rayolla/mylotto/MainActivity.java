@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int USE_NUM_OF_WINNING = 50;
     private static final int TOTAL_NUM = 45;
 
-    private ArrayList<String> mLottoList = null;
+    private ArrayList<String> mLottoList = null;    // from 1 to last winning
     private ArrayList<String> mGenList = null;
+    private ArrayList<String> mGenListWithWeight = null;
 
     private Button mButtonGenerate;
     private Button mButtonAnalysis;
@@ -136,9 +137,9 @@ public class MainActivity extends AppCompatActivity {
 
         mLottoList = new ArrayList<String>();
         mGenList = new ArrayList<String>();
+        mGenListWithWeight = new ArrayList<String>();
 
         Spinner spinner = findViewById(R.id.spinner);
-//        String[] data = {"항목 1", "항목 2", "항목 3", "항목 4"};
         String[] data = new String[100];
         for (int i=0; i<data.length; i++) {
             data[i] = Integer.toString(i+1);
@@ -195,13 +196,27 @@ public class MainActivity extends AppCompatActivity {
                     list.clear();
                 }
 
+                String genList = "";
                 for (int i=0; i<mNumToGen; i++) {
-                    String data = mGenList.get(i).replace("[", "");
+                    String data = "";
+                    data = mGenList.get(i).replace("[", "");
 
                     data = data.replace("]", "");
                     data = data.replace(" ", "");
-                    mTV_out.append(data);
+
+                    genList += data;
                 }
+
+                genList = GiftFromGodInfo.sortGenList(mNumToGen, genList, true);
+                mTV_out.append(genList);
+
+//                for (int i=0; i<mNumToGen; i++) {
+//                    String data = mGenList.get(i).replace("[", "");
+//
+//                    data = data.replace("]", "");
+//                    data = data.replace(" ", "");
+//                    mTV_out.append(data);
+//                }
 
                 mButtonAnalysis.setEnabled(true);
             }
@@ -281,6 +296,13 @@ public class MainActivity extends AppCompatActivity {
 //                        Log.d(TAG, "line: " + line);
                         mLottoList.add(line);
                     }
+
+                    String winning_list_50 = "";
+                    for (int i=0; i<USE_NUM_OF_WINNING; i++) {
+                        winning_list_50 += mLottoList.get(i) + "\n";
+                    }
+                    GiftFromGodInfo.calculateWeight(winning_list_50);
+                    GiftFromGodInfo.printWeightStatistics();
                 }
                 catch (IOException e) { e.printStackTrace(); }
             }
