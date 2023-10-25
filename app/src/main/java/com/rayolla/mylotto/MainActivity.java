@@ -304,7 +304,15 @@ public class MainActivity extends AppCompatActivity {
 
                     String winning_list_50 = "";
                     for (int i=0; i<USE_NUM_OF_WINNING; i++) {
-                        winning_list_50 += mLottoList.get(i) + "\n";
+                        String orgStr = mLottoList.get(i);
+
+                        if (isIncludeBonus(orgStr)) {
+                            String pattern = "\\d+$";
+
+                            String removedStr = orgStr.replaceAll(pattern, "");
+                            orgStr = removedStr.substring(0, removedStr.length() - 1);
+                        }
+                        winning_list_50 += orgStr + "\n";
                     }
                     GiftFromGodInfo.calculateWeight(winning_list_50);
                     GiftFromGodInfo.printWeightStatistics();
@@ -384,6 +392,22 @@ public class MainActivity extends AppCompatActivity {
             if (list.get(n) == num) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private boolean isIncludeBonus(String list) {
+        String[] numbers = list.split(",");
+
+        int count = 0;
+        for (String number : numbers) {
+            count++;
+        }
+
+        Log.d(TAG, "count: " + count);
+        if (count == 7) {
+            return true;
         }
 
         return false;

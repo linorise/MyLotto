@@ -181,6 +181,12 @@ public class AnalysisActivity extends AppCompatActivity {
 
     private void redrawGenList() {
         mTV_genlist.setText("");
+
+        if (mGenList.length < (mFocus + 1)) {
+            Log.d(TAG, "Reset focus");
+            mFocus = 0;
+        }
+
         for (int i=0; i<mGenList.length; i++) {
             String dataStr = "";
             String line = mGenList[i];
