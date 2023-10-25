@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,49 +9,54 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_genlist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="" />
-
-        <TextView
-            android:id="@+id/tv_total_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="총점: 100\n 1-x\n 2-x\n 3-x\n 4-x\n 5-x\n 6-x\n" />
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="40dp">
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/button_next"
+            <TextView
+                android:id="@+id/tv_genlist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Next" />
+                android:text="" />
 
-            <Button
-                android:id="@+id/button_delete"
+            <TextView
+                android:id="@+id/tv_total_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Delete" />
+                android:layout_marginLeft="10dp"
+                android:text="총점: 100\n 1-x\n 2-x\n 3-x\n 4-x\n 5-x\n 6-x\n" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="40dp">
+
+                <Button
+                    android:id="@+id/button_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Next" />
+
+                <Button
+                    android:id="@+id/button_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Delete" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
+        <com.rayolla.mylotto.AnalysisView
+            android:id="@+id/analysisview"
+            android:layout_width="wrap_content"
+            android:layout_height="600dp" />
+
     </LinearLayout>
-
-    <com.rayolla.mylotto.AnalysisView
-        android:id="@+id/analysisview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-
-</LinearLayout>
+</ScrollView>

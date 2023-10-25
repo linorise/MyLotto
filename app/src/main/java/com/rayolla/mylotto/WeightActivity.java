@@ -37,7 +37,15 @@ public class WeightActivity extends AppCompatActivity {
 
         mTV_gen_weight = (TextView) findViewById(R.id.tv_gen_weight);
         if (mGenList.length() > 0) {
-            mTV_gen_weight.setText(mGenList);
+            String[] lists = mGenList.split("\n");
+            int n = 1;
+
+            for (String list : lists) {
+                String data = n + ": " + list + "\n";
+                mTV_gen_weight.append(data);
+                n++;
+            }
+//            mTV_gen_weight.setText(mGenList);
         }
         else {
             mTV_gen_weight.setText("No Generated");

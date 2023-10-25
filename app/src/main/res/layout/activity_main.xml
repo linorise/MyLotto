@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/layout_1"
         android:layout_width="382dp"
         android:layout_height="61dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:weightSum="10">
 
         <TextView
@@ -25,9 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:text="Include"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Include"/>
 
         <EditText
             android:id="@+id/et_include"
@@ -38,29 +34,22 @@
             android:ems="10"
             android:inputType="text"
             android:digits="0123456789,"
-            android:hint="Enter numbers with commas"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:hint="Enter numbers with commas" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_2"
         android:layout_width="382dp"
         android:layout_height="61dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="60dp"
         android:orientation="horizontal"
-        android:weightSum="10"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/layout_1">
+        android:weightSum="10">
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Exclude"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:text="Exclude"/>
 
         <EditText
             android:id="@+id/et_exclude"
@@ -70,20 +59,14 @@
             android:ems="10"
             android:inputType="text"
             android:digits="0123456789,"
-            android:hint="Enter numbers with commas"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:hint="Enter numbers with commas"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_3"
-        android:layout_width="382dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="60dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/layout_2">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_select"
@@ -115,35 +98,36 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="382dp"
-        android:layout_height="514dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.857">
+        android:layout_marginTop="10dp">
 
         <Button
             android:id="@+id/button_generate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Generate"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_out"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:text="" />
+            android:text="Generate" />
 
         <Button
             android:id="@+id/button_analysis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Analysis"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="10dp"
             android:enabled="false"/>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp">
+
+        <TextView
+            android:id="@+id/tv_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="" />
+    </ScrollView>
+</LinearLayout>

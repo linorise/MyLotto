@@ -3,21 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_gen_weight"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
+        android:layout_height="300dp">
+        <TextView
+            android:id="@+id/tv_gen_weight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="" />
+    </ScrollView>
 
     <TextView
         android:id="@+id/tv_weight_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="Weight Statistics For Each Number" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="4dp"
