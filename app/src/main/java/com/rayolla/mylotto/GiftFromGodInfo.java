@@ -14,6 +14,7 @@ public class GiftFromGodInfo {
     private static int[] mTotalWeightPerNum = null;
 
     private static int mTotalWinningNum = 0;
+    private static String mCurGenList = "";
 
     // String list. Separator: \n
     public static void calculateWeight(String totList) {
@@ -175,42 +176,13 @@ public class GiftFromGodInfo {
         return newList;
     }
 
-
-    /*
-    public static String calculateWeightAndSort(String totList) {
-        int winningNum = 0;
-        int[] weightPerNum = new int[TOTAL_NUM];
-        String newTotList = "";
-        List<Integer> numList = new ArrayList<>();
-
-        for (int i = 0; i < weightPerNum.length; i++) {
-            weightPerNum[i] = 0;
-        }
-
-        String [] lists = totList.split("\n");
-        for (String list : lists) {
-            winningNum++;
-        }
-
-        Log.d(TAG, "winningNum: " + winningNum);
-
-        for (String list : lists) {
-            String[] numbers = list.split(",");
-            for (String number : numbers) {
-                try {
-                    int num = Integer.parseInt(number);
-                    if ((num - 1) >= 0 && (num - 1) < TOTAL_NUM) {
-                        weightPerNum[num - 1] += 1;
-                    } else {
-                        Log.d(TAG, "Buffer overflow! num:" + num);
-                    }
-                } catch (NumberFormatException e) {
-                    Log.w(TAG, "It's not number !");
-                }
-            }
-        }
-
-        return newTotList;
+    public static void setCurGenList(String genList) {
+        Log.d(TAG, "Set generated list");
+        mCurGenList = genList;
     }
-    */
+
+    public static String getCurGenList() {
+        Log.d(TAG, "Get current generated list");
+        return mCurGenList;
+    }
 }

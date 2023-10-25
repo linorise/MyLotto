@@ -52,7 +52,7 @@ import jxl.read.biff.BiffException;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyLotto_MainActivity";
-    private static final int PICK_FILE_REQUEST_CODE = 100;
+    private static final int PICK_FILE_RETURN_CODE = 100;
     private static final int USE_NUM_OF_WINNING = 50;
     private static final int TOTAL_NUM = 45;
 
@@ -210,14 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
                 genList = GiftFromGodInfo.sortGenList(mNumToGen, genList, true);
                 mTV_out.append(genList);
-
-//                for (int i=0; i<mNumToGen; i++) {
-//                    String data = mGenList.get(i).replace("[", "");
-//
-//                    data = data.replace("]", "");
-//                    data = data.replace(" ", "");
-//                    mTV_out.append(data);
-//                }
+                GiftFromGodInfo.setCurGenList(genList);
 
                 mButtonAnalysis.setEnabled(true);
             }
@@ -277,10 +270,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        Log.d(TAG, "onRestart");
+        String modifiedGenList = GiftFromGodInfo.getCurGenList();
+        Log.d(TAG, "modifiedGenList: " + modifiedGenList);
+        mTV_out.setText(modifiedGenList);
+        GiftFromGodInfo.setCurGenList(modifiedGenList);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == PICK_FILE_RETURN_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 Uri selectedFileUri = data.getData();
                 Log.d(TAG, "selectedFileUri: " + selectedFileUri);
@@ -320,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             startActivityForResult(
-                    Intent.createChooser(intent, "Select the winning list file"), PICK_FILE_REQUEST_CODE);
+                    Intent.createChooser(intent, "Select the winning list file"), PICK_FILE_RETURN_CODE);
         } catch (android.content.ActivityNotFoundException ex) {
         }
     }

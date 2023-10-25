@@ -2,6 +2,7 @@ package com.rayolla.mylotto;
 
 import static android.content.Intent.getIntent;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -105,6 +106,7 @@ public class AnalysisActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String deleteList = mAnalysisView.getFocusedList();
+                String tmpList = "";
                 String[] tmpGenList = mGenList;
                 Log.d(TAG, "You delete: " + deleteList);
 
@@ -124,6 +126,7 @@ public class AnalysisActivity extends AppCompatActivity {
                 for (int i=0; i<tmpGenList.length; i++) {
                     if (tmpGenList[i].length() > 0) {
                         mGenList[count++] = tmpGenList[i];
+                        tmpList += tmpGenList[i] + "\n";
                     }
                 }
 
@@ -133,10 +136,17 @@ public class AnalysisActivity extends AppCompatActivity {
 
                 redrawGenList();
                 mAnalysisView.invalidate();
+
+                GiftFromGodInfo.setCurGenList(tmpList);
             }
         });
 
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void setWeightInfo(String list) {
