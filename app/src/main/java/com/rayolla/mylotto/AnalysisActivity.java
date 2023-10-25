@@ -21,9 +21,9 @@ public class AnalysisActivity extends AppCompatActivity {
 
     private int mFocus = 0;
     private String[] mGenList = null;
-    private String mPickedList = "";
 
-    AnalysisView mAnalysisView = null;
+    private AnalysisView mAnalysisView = null;
+    private TextView mTV_genlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +39,11 @@ public class AnalysisActivity extends AppCompatActivity {
 //        GiftFromGodInfo.calculateWeight(winningList);
 //        GiftFromGodInfo.printWeightStatistics();
 
+        mTV_genlist = (TextView) findViewById(R.id.tv_genlist);
         mAnalysisView = (AnalysisView) findViewById(R.id.analysisview);
         mAnalysisView.setWinningList(winningList);
 
         if (genList.length() > 0) {
-            TextView textView = (TextView) findViewById(R.id.tv_genlist);
-
             String[] lines = genList.split("\n");
             mGenList = lines;
             int n = 0;
@@ -61,7 +60,7 @@ public class AnalysisActivity extends AppCompatActivity {
                 else {
                     dataStr = line + "<br>";
                 }
-                textView.append(Html.fromHtml(dataStr, Html.FROM_HTML_MODE_COMPACT));
+                mTV_genlist.append(Html.fromHtml(dataStr, Html.FROM_HTML_MODE_COMPACT));
                 n++;
             }
         }
@@ -101,13 +100,39 @@ public class AnalysisActivity extends AppCompatActivity {
             }
         });
 
-        Button button_pick = (Button) findViewById(R.id.button_pick);
-        button_pick.setOnClickListener(new View.OnClickListener() {
+        Button button_delete = (Button) findViewById(R.id.button_delete);
+        button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPickedList += mAnalysisView.getFocusedList() + "\n";
+                String deleteList = mAnalysisView.getFocusedList();
+                String[] tmpGenList = mGenList;
+                Log.d(TAG, "You delete: " + deleteList);
 
-                Log.d(TAG, "Your picked list: " + mPickedList);
+                int count = 0;
+                for (int i=0; i<tmpGenList.length; i++) {
+                    if (deleteList.equals(tmpGenList[i])) {
+                        tmpGenList[i] = "";
+                    }
+                    else {
+                        count++;
+                    }
+                }
+
+                mGenList = null;
+                mGenList = new String[count];
+                count = 0;
+                for (int i=0; i<tmpGenList.length; i++) {
+                    if (tmpGenList[i].length() > 0) {
+                        mGenList[count++] = tmpGenList[i];
+                    }
+                }
+
+                for (int i=0; i<mGenList.length; i++) {
+                    Log.d(TAG, "new Gen List: " + mGenList[i]);
+                }
+
+                redrawGenList();
+                mAnalysisView.invalidate();
             }
         });
 
@@ -142,5 +167,25 @@ public class AnalysisActivity extends AppCompatActivity {
             total += infos[i];
         }
         tv_total_score.setText(info + total);
+    }
+
+    private void redrawGenList() {
+        mTV_genlist.setText("");
+        for (int i=0; i<mGenList.length; i++) {
+            String dataStr = "";
+            String line = mGenList[i];
+
+            if (i == mFocus) {
+                mAnalysisView.setGeneratedList(line);
+                dataStr = "<font color='#FF0000'>" + line + "</font><br>";
+
+                mAnalysisView.setFocusedList(line);
+                setWeightInfo(line);
+            }
+            else {
+                dataStr = line + "<br>";
+            }
+            mTV_genlist.append(Html.fromHtml(dataStr, Html.FROM_HTML_MODE_COMPACT));
+        }
     }
 }
