@@ -43,6 +43,13 @@
                     android:text="Next" />
 
                 <Button
+                    android:id="@+id/button_prev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Prev" />
+
+                <Button
                     android:id="@+id/button_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

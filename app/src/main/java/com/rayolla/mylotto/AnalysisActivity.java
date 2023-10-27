@@ -101,6 +101,41 @@ public class AnalysisActivity extends AppCompatActivity {
             }
         });
 
+        Button button_prev = (Button) findViewById(R.id.button_prev);
+        button_prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView tv_genlist = (TextView) findViewById(R.id.tv_genlist);
+                int n = 0;
+
+                mFocus--;
+                tv_genlist.setText("");
+
+                Log.d(TAG, "len: " + mGenList.length);
+                if (mFocus < 0) {
+                    mFocus = mGenList.length - 1;
+                }
+
+                for (String line : mGenList) {
+                    String dataStr = "";
+                    if (n == mFocus) {
+                        mAnalysisView.setFocusedList(line);
+                        dataStr = "<font color='#FF0000'>" + line + "</font><br>";
+
+                        // set weight
+                        setWeightInfo(line);
+                    }
+                    else {
+                        dataStr = line + "<br>";
+                    }
+                    tv_genlist.append(Html.fromHtml(dataStr, Html.FROM_HTML_MODE_COMPACT));
+                    n++;
+                }
+
+                mAnalysisView.invalidate();
+            }
+        });
+
         Button button_delete = (Button) findViewById(R.id.button_delete);
         button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
