@@ -46,15 +46,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
-
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyLotto_MainActivity";
     private static final int PICK_FILE_RETURN_CODE = 100;
-    private static final int USE_NUM_OF_WINNING = 50;
     private static final int TOTAL_NUM = 45;
+    private static final int DEFAULT_GEN_NUM = 9;
+
+    private static int mUseNumOfWinning = 0;
 
     private ArrayList<String> mLottoList = null;    // from 1 to last winning
     private ArrayList<String> mGenList = null;
@@ -72,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mUseNumOfWinning = GiftFromGodInfo.USE_NUM_OF_WINNING;
 
         EditText et_include = (EditText) findViewById(R.id.et_include);
         InputFilter[] filters = new InputFilter[1];
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setSelection(4);    // default
+        spinner.setSelection(DEFAULT_GEN_NUM);    // default
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String winning_list_50 = "";
 
-                for (int i=0; i<USE_NUM_OF_WINNING; i++) {
+                for (int i=0; i<mUseNumOfWinning; i++) {
                     winning_list_50 += mLottoList.get(i) + "\n";
                 }
 
@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "list: " + mTV_out.getText().toString());
                 String winning_list_50 = "";
 
-                for (int i=0; i<USE_NUM_OF_WINNING; i++) {
+                for (int i=0; i<mUseNumOfWinning; i++) {
                     winning_list_50 += mLottoList.get(i) + "\n";
                 }
 
@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     String winning_list_50 = "";
-                    for (int i=0; i<USE_NUM_OF_WINNING; i++) {
+                    for (int i=0; i<mUseNumOfWinning; i++) {
                         String orgStr = mLottoList.get(i);
 
                         if (isIncludeBonus(orgStr)) {

@@ -20,8 +20,8 @@ public class AnalysisView extends View {
     private static final int TOTAL_NUM = 45;
     private int mWidth_X;
     private int mHeight_Y;
-    private int mXNum = 50;   // number to draw from X to Y
-    private int mYNum = 46;   // number to draw from Y to X
+    private int mXNum = 0;   // number to draw from X to Y
+    private int mYNum = 0;   // number to draw from Y to X
 
     private int mMaxY = 0;
 
@@ -41,6 +41,8 @@ public class AnalysisView extends View {
         super(context, attrs);
 
         Log.d(TAG, "AnalysisView constructor");
+        mXNum = GiftFromGodInfo.USE_NUM_OF_WINNING + 1;
+        mYNum = TOTAL_NUM + 1;
     }
 
     @Override

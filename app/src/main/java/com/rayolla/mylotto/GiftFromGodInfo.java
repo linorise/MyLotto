@@ -10,7 +10,8 @@ import java.util.List;
 
 public class GiftFromGodInfo {
     private static final String TAG = "MyLotto_GiftFromGodInfo";
-    private static final int TOTAL_NUM = 45;
+    private static final int TOTAL_NUM = 45;    // the number of each number for lotto
+    public static final int USE_NUM_OF_WINNING = 100;
     private static int[] mTotalWeightPerNum = null;
 
     private static int mTotalWinningNum = 0;

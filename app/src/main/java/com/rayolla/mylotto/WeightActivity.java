@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class WeightActivity extends AppCompatActivity {
     private static final String TAG = "MyLotto_WeightActivity";
 
-    private static final int USE_NUM_OF_WINNING = 50;
     private static final int TOTAL_NUM = 45;
 
     private String mGenList = "";

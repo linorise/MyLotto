@@ -11,7 +11,7 @@ android {
         minSdk = 31
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,6 +23,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -36,7 +37,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("jexcelapi:jxl:2.6")
+//    implementation("jexcelapi:jxl:2.6")
 //    implementation("net.sourceforge.jexcelapi:jxl:2.6.12")
 //    implementation("org.apache.poi:poi:5.2.4")
     testImplementation("junit:junit:4.13.2")
