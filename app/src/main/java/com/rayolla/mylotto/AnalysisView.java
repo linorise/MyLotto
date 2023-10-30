@@ -16,6 +16,8 @@ public class AnalysisView extends View {
     private static final String TAG = "MyLotto_AnalysisView";
     private static final int DEFAULT_LINE_INTERVAL = 30;
     private static final int START_X = 30;
+    private static final int START_X0 = 10;
+    private static final int STOP_X0 = 10;
     private static final int START_Y = 30;
     private static final int TOTAL_NUM = 45;
     private int mWidth_X;
@@ -61,63 +63,10 @@ public class AnalysisView extends View {
         Log.d(TAG, "MaximumBitmapHeight: " + canvas.getMaximumBitmapHeight());
         Log.d(TAG, "MaximumBitmapWidth: " + canvas.getMaximumBitmapWidth());
 
-        Log.d(TAG, "X축 샘플 100:  ");
-
-        /*
-        Paint paint = new Paint();
-        paint.setColor(getResources().getColor(R.color.colorPrimary));
-//        paint.setStrokeWidth(5);    // 선 두께
-
-//        paint.setStrokeWidth(20);
-//        canvas.drawPoint(100, 100, paint);  // 점
-
-        paint.setStrokeWidth(2);    // 선 두께
-        paint.setColor(Color.BLACK);
-        */
-
-        /*
-        canvas.drawLine(140, 140, 140, 1000, paint);
-        canvas.drawLine(200, 200, 200, 1000, paint);
-        canvas.drawLine(400, 400, 400, 1200, paint);
-        canvas.drawLine(430, 400, 430, 1200, paint);
-        canvas.drawLine(470, 400, 470, 1200, paint);
-        */
-
-        // X축
-        /*
-        canvas.drawLine(140, 140, 140, 1200, paint);
-        canvas.drawLine(170, 140, 170, 1200, paint);
-        canvas.drawLine(200, 140, 200, 1200, paint);
-        canvas.drawLine(230, 140, 230, 1200, paint);
-        */
-
-        // Y축
-        // 점선 설정
-        /*
-//        PathEffect pathEffect = new DashPathEffect(new float[]{20, 10}, 0);
-        PathEffect pathEffect = new DashPathEffect(new float[]{10, 5}, 0);
-        paint.setPathEffect(pathEffect);
-
-        canvas.drawLine(140, 140, 3100, 140, paint);
-        canvas.drawLine(140, 170, 3100, 170, paint);
-        canvas.drawLine(140, 200, 3100, 200, paint);
-        */
-
         drawX(canvas);
         drawY(canvas);
 
         drawWinningList();
-
-//        drawPoint(canvas, 30, 30);
-//        drawPoint(canvas, 30, 60);
-//        drawPoint(canvas, 30, 90);
-//        drawPoint(canvas, 60, 60);
-//        drawPoint(canvas, 60, 90);
-
-//        for (int i=1; i<=45; i++) {
-//            drawPoint(canvas, 30, 30*i);
-//        }
-
         drawFocusedList();
     }
 
@@ -134,9 +83,9 @@ public class AnalysisView extends View {
         Paint paint = new Paint();
         PathEffect pathEffect = new DashPathEffect(new float[]{10, 5}, 0);
 
-        int startX = START_X;
+        int startX = START_X0;
         int startY = START_Y;
-        int stopX = START_X;
+        int stopX = STOP_X0;
         int stopY = START_Y + (mYNum-1)*DEFAULT_LINE_INTERVAL;
 
 //        Log.d(TAG, "drawX:");
@@ -179,9 +128,9 @@ public class AnalysisView extends View {
         Paint paint = new Paint();
         PathEffect pathEffect = new DashPathEffect(new float[]{10, 5}, 0);
 
-        int startX = START_X;
+        int startX = START_X0;
         int startY = START_Y;
-        int stopX = START_X + (mXNum - 1)*DEFAULT_LINE_INTERVAL;
+        int stopX = STOP_X0 + (mXNum - 1)*DEFAULT_LINE_INTERVAL;
         int stopY = START_Y;
         int i;
         int count = 0;
@@ -262,7 +211,7 @@ public class AnalysisView extends View {
         }
 
         for (int i=0; i<data.length; i++) {
-            canvas.drawPoint(startPos, mMaxY - (30*data[i]), paint);
+            canvas.drawPoint(startPos, mMaxY - (DEFAULT_LINE_INTERVAL * data[i]), paint);
         }
     }
 
@@ -289,7 +238,7 @@ public class AnalysisView extends View {
         String[] lines = mWinningList.split("\n");
         int n = 2;  // second row. first is for generated number.
         for (String line : lines) {
-            drawPoint(mCanvas, Color.BLACK, line, n * START_X);
+            drawPoint(mCanvas, Color.BLACK, line, (n * START_X) - 20);
             n++;
         }
     }
@@ -311,7 +260,7 @@ public class AnalysisView extends View {
 
         Log.d(TAG, "Draw focused list. " + mFocusedList);
 
-        drawPoint(mCanvas, Color.RED, mFocusedList, START_X);
+        drawPoint(mCanvas, Color.RED, mFocusedList, START_X0);
     }
 
     public String getFocusedList() {
