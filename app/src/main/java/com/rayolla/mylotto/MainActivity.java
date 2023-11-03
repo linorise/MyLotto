@@ -48,15 +48,24 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyLotto_MainActivity";
-    private static final int PICK_FILE_RETURN_CODE = 100;
+    private static final int PICK_WIN_FILE_RETURN_CODE = 100;
+    private static final int PICK_INCLUDE_FILE_RETURN_CODE = 101;
+    private static final int PICK_EXCLUDE_FILE_RETURN_CODE = 102;
     private static final int TOTAL_NUM = 45;
     private static final int DEFAULT_GEN_NUM = 9;
+    private static final boolean DEBUG = false;
 
     private static int mUseNumOfWinning = 0;
 
     private ArrayList<String> mLottoList = null;    // from 1 to last winning
     private ArrayList<String> mGenList = null;
     private ArrayList<String> mGenListWithWeight = null;
+
+    private String mIncludeNumber = "";
+    private String mExcludeNumber = "";
+
+    private EditText mET_include;
+    private EditText mET_exclude;
 
     private Button mButtonGenerate;
     private Button mButtonAnalysis;
@@ -73,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
         mUseNumOfWinning = GiftFromGodInfo.USE_NUM_OF_WINNING;
 
-        EditText et_include = (EditText) findViewById(R.id.et_include);
+        mET_include = (EditText) findViewById(R.id.et_include);
         InputFilter[] filters = new InputFilter[1];
         filters[0] = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end,
@@ -88,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        et_include.setFilters(filters);
-        et_include.addTextChangedListener(new TextWatcher() {
+        mET_include.setFilters(filters);
+        mET_include.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -106,30 +115,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        EditText et_exclude = (EditText)findViewById(R.id.et_exclude);
-        et_exclude.setFilters(filters);
-        et_exclude.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "onTextChanged: " + s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Button button_select = (Button) findViewById(R.id.button_select);
-        button_select.setOnClickListener(new View.OnClickListener() {
+        Button button_select_include = (Button) findViewById(R.id.button_select_include);
+        button_select_include.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFileChooser();
+                showFileChooser(PICK_INCLUDE_FILE_RETURN_CODE);
+            }
+        });
+
+        mET_exclude = (EditText)findViewById(R.id.et_exclude);
+        mET_exclude.setFilters(filters);
+        mET_exclude.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: " + s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        Button button_select_exclude = (Button) findViewById(R.id.button_select_exclude);
+        button_select_exclude.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileChooser(PICK_EXCLUDE_FILE_RETURN_CODE);
+            }
+        });
+
+        Button button_select_win = (Button) findViewById(R.id.button_select_win);
+        button_select_win.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileChooser(PICK_WIN_FILE_RETURN_CODE);
 
                 mButtonWeight.setEnabled(true);
             }
@@ -179,6 +204,10 @@ public class MainActivity extends AppCompatActivity {
                     do {
                         int num = getRand();
 
+                        if (checkDupExcludeNumber(num)) {
+                            continue;
+                        }
+
                         if (isDuplicated(list, num)) {
                             continue;
                         }
@@ -188,7 +217,9 @@ public class MainActivity extends AppCompatActivity {
                     } while (count < 6);
 
                     Collections.sort(list);
-                    Log.d(TAG, "list:  " + list.toString());
+                    if (DEBUG) {
+                        Log.d(TAG, "list:  " + list.toString());
+                    }
 
                     if (!checkDuplicationList(mLottoList, list)) {
                         mGenList.add(list.toString()+"\n");
@@ -275,7 +306,9 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "onRestart");
         String modifiedGenList = GiftFromGodInfo.getCurGenList();
-        Log.d(TAG, "modifiedGenList: " + modifiedGenList);
+        if (DEBUG) {
+            Log.d(TAG, "modifiedGenList: " + modifiedGenList);
+        }
         mTV_out.setText(modifiedGenList);
         GiftFromGodInfo.setCurGenList(modifiedGenList);
     }
@@ -284,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_FILE_RETURN_CODE && resultCode == RESULT_OK) {
+        if (requestCode == PICK_WIN_FILE_RETURN_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 Uri selectedFileUri = data.getData();
                 Log.d(TAG, "selectedFileUri: " + selectedFileUri);
@@ -322,9 +355,49 @@ public class MainActivity extends AppCompatActivity {
 
             mButtonGenerate.setEnabled(true);
         }
+        else if (requestCode == PICK_INCLUDE_FILE_RETURN_CODE && resultCode == RESULT_OK) {
+            Uri selectedFileUri = data.getData();
+            Log.d(TAG, "selectedFileUri: " + selectedFileUri);
+
+            // Clear
+            mIncludeNumber = "";
+
+            try {
+                InputStream inputStream = getInputStreamFromUri(selectedFileUri);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+//                        Log.d(TAG, "line: " + line);
+                    mIncludeNumber = line;
+                }
+
+                mET_include.setText(mIncludeNumber);
+            }
+            catch (IOException e) { e.printStackTrace(); }
+        }
+        else if (requestCode == PICK_EXCLUDE_FILE_RETURN_CODE && resultCode == RESULT_OK) {
+            Uri selectedFileUri = data.getData();
+            Log.d(TAG, "selectedFileUri: " + selectedFileUri);
+
+            // Clear
+            mExcludeNumber = "";
+
+            try {
+                InputStream inputStream = getInputStreamFromUri(selectedFileUri);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+//                        Log.d(TAG, "line: " + line);
+                    mExcludeNumber = line;
+                }
+
+                mET_exclude.setText(mExcludeNumber);
+            }
+            catch (IOException e) { e.printStackTrace(); }
+        }
     }
 
-    private void showFileChooser() {
+    private void showFileChooser(int requestCode) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 //        intent.setType("*/*");
         intent.setType("text/plain");
@@ -332,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             startActivityForResult(
-                    Intent.createChooser(intent, "Select the winning list file"), PICK_FILE_RETURN_CODE);
+                    Intent.createChooser(intent, "Select the winning list file"), requestCode);
         } catch (android.content.ActivityNotFoundException ex) {
         }
     }
@@ -372,7 +445,9 @@ public class MainActivity extends AppCompatActivity {
         // FOR TEST
 //        gen = "10,23,29,33,37,40";
 
-        Log.d(TAG, "gen: " + gen);
+        if (DEBUG) {
+            Log.d(TAG, "gen: " + gen);
+        }
 
         for (int i=0; i<lottoList.size(); i++) {
             String str = lottoList.get(i);
@@ -405,9 +480,26 @@ public class MainActivity extends AppCompatActivity {
             count++;
         }
 
-        Log.d(TAG, "count: " + count);
+//        Log.d(TAG, "count: " + count);
         if (count == 7) {
             return true;
+        }
+
+        return false;
+    }
+
+    private boolean checkDupExcludeNumber(int number) {
+        String[] numbers = mExcludeNumber.split(",");
+
+        if (DEBUG) {
+            Log.d(TAG, "Exclude numbers: " + mExcludeNumber);
+        }
+
+        for (String numStr : numbers) {
+            if (number == Integer.parseInt(numStr)) {
+                Log.d(TAG, number + " is exclude number. Drop.");
+                return true;
+            }
         }
 
         return false;

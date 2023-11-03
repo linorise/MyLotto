@@ -29,12 +29,21 @@
             android:id="@+id/et_include"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="8"
             android:layout_marginTop="16dp"
-            android:layout_weight="9"
             android:ems="10"
             android:inputType="text"
             android:digits="0123456789,"
-            android:hint="Enter numbers with commas" />
+            android:hint="ex) 1,9,36" />
+
+        <Button
+            android:id="@+id/button_select_include"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="16dp"
+            android:text="Select"
+            app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
 
     <LinearLayout
@@ -55,11 +64,19 @@
             android:id="@+id/et_exclude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="9"
+            android:layout_weight="8"
             android:ems="10"
             android:inputType="text"
             android:digits="0123456789,"
-            android:hint="Enter numbers with commas"/>
+            android:hint="ex) 3,7,24"/>
+
+        <Button
+            android:id="@+id/button_select_exclude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Select"
+            app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
 
     <LinearLayout
@@ -69,10 +86,10 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button_select"
+            android:id="@+id/button_select_win"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select File"
+            android:text="Select Win"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
