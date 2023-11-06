@@ -41,6 +41,7 @@ import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String APP_SHARED_PREF = "AppSharedPref";
     private static final String APP_SHARED_PREF_EXCLUDE = "exclude";
     private static final String APP_SHARED_PREF_INCLUDE = "include";
+    private static final String DEFAULT_FILE_PATH = "/storage/self/primary/Download/";
     private static final boolean DEBUG = false;
 
     private static int mUseNumOfWinning = 0;
@@ -118,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
                 mIncludeNumber = s.toString();
                 setAppSharedPref(APP_SHARED_PREF_INCLUDE, s.toString());
+
+                saveValue("include", s.toString());
             }
 
             @Override
@@ -148,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
 
                 mExcludeNumber = s.toString();
                 setAppSharedPref(APP_SHARED_PREF_EXCLUDE, s.toString());
+
+                saveValue("exclude", s.toString());
             }
 
             @Override
@@ -595,5 +601,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return "";
+    }
+
+    private void saveValue(String key, String value) {
+        try {
+            if (key.equals("include") || key.equals("exclude")) {
+                Log.d(TAG, "save value: " + value);
+                String filename = DEFAULT_FILE_PATH + key + ".txt";
+
+                FileOutputStream outputStream = new FileOutputStream(filename);
+                outputStream.write(value.getBytes());
+                outputStream.close();
+            }
+            else {
+                Log.d(TAG, "key must be 'include' or 'exclude'");
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
