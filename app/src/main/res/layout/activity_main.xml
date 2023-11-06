@@ -18,7 +18,7 @@
         android:weightSum="10">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tv_include"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -54,7 +54,7 @@
         android:weightSum="10">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tv_exclude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -68,7 +68,7 @@
             android:ems="10"
             android:inputType="text"
             android:digits="0123456789,"
-            android:hint="ex) 3,7,24"/>
+            android:hint="ex) 3,7,24,38"/>
 
         <Button
             android:id="@+id/button_select_exclude"

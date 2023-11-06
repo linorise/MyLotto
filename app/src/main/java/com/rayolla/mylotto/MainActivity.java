@@ -4,7 +4,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_EXCLUDE_FILE_RETURN_CODE = 102;
     private static final int TOTAL_NUM = 45;
     private static final int DEFAULT_GEN_NUM = 9;
+    private static final int NUMBER_POOL_COUNT = 6;
+    private static final String APP_SHARED_PREF = "AppSharedPref";
+    private static final String APP_SHARED_PREF_EXCLUDE = "exclude";
+    private static final String APP_SHARED_PREF_INCLUDE = "include";
     private static final boolean DEBUG = false;
 
     private static int mUseNumOfWinning = 0;
@@ -107,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(TAG, "onTextChanged: " + s);
+
+                mIncludeNumber = s.toString();
+                setAppSharedPref(APP_SHARED_PREF_INCLUDE, s.toString());
             }
 
             @Override
@@ -134,6 +143,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(TAG, "onTextChanged: " + s);
+
+                mExcludeNumber = s.toString();
+                setAppSharedPref(APP_SHARED_PREF_EXCLUDE, s.toString());
             }
 
             @Override
@@ -199,8 +211,19 @@ public class MainActivity extends AppCompatActivity {
 
                 for (int i=0; i<mNumToGen; i++) {
                     List<Integer> list = new ArrayList<>();
+                    int numIncCount = 0;
                     int count = 0;
 
+                    if (mIncludeNumber.length() > 0) {
+                        String[] IncNumbers = mIncludeNumber.split(",");
+
+                        for (String numIncStr : IncNumbers) {
+                            list.add(Integer.parseInt(numIncStr));
+                            numIncCount++;
+                        }
+                    }
+
+                    count += numIncCount;
                     do {
                         int num = getRand();
 
@@ -214,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
                         list.add(num);
                         count++;
-                    } while (count < 6);
+                    } while (count < NUMBER_POOL_COUNT);
 
                     Collections.sort(list);
                     if (DEBUG) {
@@ -298,6 +321,9 @@ public class MainActivity extends AppCompatActivity {
         for (int i=0; i<mWeightPerNum.length; i++) {
             mWeightPerNum[i] = 0;
         }
+
+        mET_include.setText(getAppSharedPref("include"));
+        mET_exclude.setText(getAppSharedPref("exclude"));
     }
 
     @Override
@@ -488,7 +514,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private boolean checkDupExcludeNumber(int number) {
+    private boolean checkDupExcludeNumber(int genNumber) {
         String[] numbers = mExcludeNumber.split(",");
 
         if (DEBUG) {
@@ -496,12 +522,50 @@ public class MainActivity extends AppCompatActivity {
         }
 
         for (String numStr : numbers) {
-            if (number == Integer.parseInt(numStr)) {
-                Log.d(TAG, number + " is exclude number. Drop.");
+            if (genNumber == Integer.parseInt(numStr)) {
+                Log.d(TAG, genNumber + " is exclude number. Drop.");
                 return true;
             }
         }
 
         return false;
+    }
+
+    private boolean checkIncludeNumber(int genNumber) {
+        if (mIncludeNumber.length() > 0) {
+            String[] IncNumbers = mIncludeNumber.split(",");
+
+            for (String numIncStr : IncNumbers) {
+                int incNumber = Integer.parseInt(numIncStr);
+
+                if (incNumber == genNumber) {
+                    Log.d(TAG, "Gen number: " + genNumber + " is included");
+                    return true;
+                }
+            }
+        }
+        else {
+            return true;
+        }
+
+        return false;
+    }
+
+    private String getAppSharedPref(String key) {
+        SharedPreferences sharedPreferences = getSharedPreferences(APP_SHARED_PREF, Context.MODE_PRIVATE);
+        String value = sharedPreferences.getString(key, "");
+
+        Log.d(TAG, "get key: " + key + " value: " + value);
+
+        return value;
+    }
+
+    private void setAppSharedPref(String key, String value) {
+        SharedPreferences sharedPreferences = getSharedPreferences(APP_SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Log.d(TAG, "set key: " + key + " value: " + value);
+        editor.putString(key, value);
+        editor.apply();
     }
 }
