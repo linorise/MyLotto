@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -316,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mTV_out = (TextView) findViewById(R.id.tv_out);
+        mTV_out.setText(getVersionName());
 
         mWeightPerNum = new int[TOTAL_NUM];
         for (int i=0; i<mWeightPerNum.length; i++) {
@@ -576,5 +579,21 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "set key: " + key + " value: " + value);
         editor.putString(key, value);
         editor.apply();
+    }
+
+    private String getVersionName() {
+        PackageManager packageManager = getPackageManager();
+        String packageName = getPackageName();
+
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+            String versionName = packageInfo.versionName;
+
+            return "v" + versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 }
