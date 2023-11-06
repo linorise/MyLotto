@@ -2,29 +2,42 @@ package com.rayolla.mylotto;
 
 import static android.content.Intent.getIntent;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.Editable;
 import android.text.Html;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class AnalysisActivity extends AppCompatActivity {
     private static final String TAG = "MyLotto_AnalysisActivity";
+    private static final String APP_SHARED_PREF = "AppSharedPref";
+    private static final String APP_SHARED_PREF_EXCLUDE = "exclude";
+    private static final String APP_SHARED_PREF_INCLUDE = "include";
 
     private int mFocus = 0;
     private String[] mGenList = null;
 
     private AnalysisView mAnalysisView = null;
     private TextView mTV_genlist;
+
+    private EditText mET_include;
+    private EditText mET_exclude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +189,63 @@ public class AnalysisActivity extends AppCompatActivity {
             }
         });
 
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        mET_include = (EditText) findViewById(R.id.et_include);
+        InputFilter[] filters = new InputFilter[1];
+        filters[0] = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end,
+                                       Spanned dest, int dstart, int dend) {
+                String filteredText = source.subSequence(start, end).toString();
+
+                String regex = "[0-9,]+";
+                if (filteredText.matches(regex)) {
+                    return null;
+                } else {
+                    return "";
+                }
+            }
+        };
+        mET_include.setFilters(filters);
+        mET_include.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: " + s);
+                setAppSharedPref(APP_SHARED_PREF_INCLUDE, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mET_exclude = (EditText) findViewById(R.id.et_exclude);
+        mET_exclude.setFilters(filters);
+        mET_exclude.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: " + s);
+
+                setAppSharedPref(APP_SHARED_PREF_EXCLUDE, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mET_include.setText(getAppSharedPref("include"));
+        mET_exclude.setText(getAppSharedPref("exclude"));
     }
 
     @Override
@@ -238,5 +307,23 @@ public class AnalysisActivity extends AppCompatActivity {
             }
             mTV_genlist.append(Html.fromHtml(dataStr, Html.FROM_HTML_MODE_COMPACT));
         }
+    }
+
+    private String getAppSharedPref(String key) {
+        SharedPreferences sharedPreferences = getSharedPreferences(APP_SHARED_PREF, Context.MODE_PRIVATE);
+        String value = sharedPreferences.getString(key, "");
+
+        Log.d(TAG, "get key: " + key + " value: " + value);
+
+        return value;
+    }
+
+    private void setAppSharedPref(String key, String value) {
+        SharedPreferences sharedPreferences = getSharedPreferences(APP_SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Log.d(TAG, "set key: " + key + " value: " + value);
+        editor.putString(key, value);
+        editor.apply();
     }
 }

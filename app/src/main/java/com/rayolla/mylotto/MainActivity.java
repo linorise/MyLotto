@@ -337,6 +337,11 @@ public class MainActivity extends AppCompatActivity {
         }
         mTV_out.setText(modifiedGenList);
         GiftFromGodInfo.setCurGenList(modifiedGenList);
+
+        // Reset Include, Exclude
+        Log.d(TAG, "Reset Include, Exclude");
+        mET_include.setText(getAppSharedPref("include"));
+        mET_exclude.setText(getAppSharedPref("exclude"));
     }
 
     @Override
@@ -375,6 +380,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                     GiftFromGodInfo.calculateWeight(winning_list_50);
                     GiftFromGodInfo.printWeightStatistics();
+
+                    if (mLottoList.size() > 0) {
+                        mButtonAnalysis.setEnabled(true);
+                    }
                 }
                 catch (IOException e) { e.printStackTrace(); }
             }

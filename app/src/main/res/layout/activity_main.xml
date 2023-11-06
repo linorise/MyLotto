@@ -34,7 +34,8 @@
             android:ems="10"
             android:inputType="text"
             android:digits="0123456789,"
-            android:hint="ex) 1,9,36" />
+            android:hint="ex) 1,9,36"
+            android:textSize="16dp"/>
 
         <Button
             android:id="@+id/button_select_include"
@@ -68,7 +69,8 @@
             android:ems="10"
             android:inputType="text"
             android:digits="0123456789,"
-            android:hint="ex) 3,7,24,38"/>
+            android:hint="ex) 3,7,24,38"
+            android:textSize="16dp"/>
 
         <Button
             android:id="@+id/button_select_exclude"
