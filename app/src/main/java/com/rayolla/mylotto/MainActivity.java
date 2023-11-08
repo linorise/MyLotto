@@ -217,64 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 mTV_out.setText("");
                 mGenList.clear();
 
-                for (int i=0; i<mNumToGen; i++) {
-                    List<Integer> list = new ArrayList<>();
-                    int numIncCount = 0;
-                    int count = 0;
-
-                    if (mIncludeNumber.length() > 0) {
-                        String[] IncNumbers = mIncludeNumber.split(",");
-
-                        for (String numIncStr : IncNumbers) {
-                            list.add(Integer.parseInt(numIncStr));
-                            numIncCount++;
-                        }
-                    }
-
-                    count += numIncCount;
-                    do {
-                        int num = getRand();
-
-                        if (checkDupExcludeNumber(num)) {
-                            continue;
-                        }
-
-                        if (isDuplicated(list, num)) {
-                            continue;
-                        }
-
-                        list.add(num);
-                        count++;
-                    } while (count < NUMBER_POOL_COUNT);
-
-                    Collections.sort(list);
-                    if (DEBUG) {
-                        Log.d(TAG, "list:  " + list.toString());
-                    }
-
-                    if (!checkDuplicationList(mLottoList, list)) {
-                        mGenList.add(list.toString()+"\n");
-                    }
-
-                    list.clear();
-                }
-
-                String genList = "";
-                for (int i=0; i<mNumToGen; i++) {
-                    String data = "";
-                    data = mGenList.get(i).replace("[", "");
-
-                    data = data.replace("]", "");
-                    data = data.replace(" ", "");
-
-                    genList += data;
-                }
-
-                genList = GiftFromGodInfo.sortGenList(mNumToGen, genList, true);
-                mTV_out.append(genList);
-                GiftFromGodInfo.setCurGenList(genList);
-
-                mButtonAnalysis.setEnabled(true);
+                generateNumber();
             }
         });
 
@@ -285,20 +228,7 @@ public class MainActivity extends AppCompatActivity {
         mButtonWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String winning_list_50 = "";
-
-                for (int i=0; i<mUseNumOfWinning; i++) {
-                    winning_list_50 += mLottoList.get(i) + "\n";
-                }
-
-                Intent i = new Intent(Intent.ACTION_MAIN);
-                i.setClassName("com.rayolla.mylotto", "com.rayolla.mylotto.WeightActivity");
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                i.putExtra("gen_list", mTV_out.getText().toString());
-                i.putExtra("winning_list", winning_list_50);
-                getApplicationContext().startActivity(i);
+                startWeightActivity();
             }
         });
 
@@ -306,20 +236,7 @@ public class MainActivity extends AppCompatActivity {
         mButtonAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "list: " + mTV_out.getText().toString());
-                String winning_list_50 = "";
-
-                for (int i=0; i<mUseNumOfWinning; i++) {
-                    winning_list_50 += mLottoList.get(i) + "\n";
-                }
-
-                Intent i = new Intent(Intent.ACTION_MAIN);
-                i.setClassName("com.rayolla.mylotto", "com.rayolla.mylotto.AnalysisActivity");
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                i.putExtra("gen_list", mTV_out.getText().toString());
-                i.putExtra("winning_list", winning_list_50);
-                getApplicationContext().startActivity(i);
+                startAnalysisActivity();
             }
         });
 
@@ -441,6 +358,103 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void generateNumber() {
+        int genNum = 1;
+
+        while (genNum <= mNumToGen) {
+            List<Integer> list = new ArrayList<>();
+            int numIncCount = 0;
+            int count = 0;
+
+            if (mIncludeNumber.length() > 0) {
+                String[] IncNumbers = mIncludeNumber.split(",");
+
+                for (String numIncStr : IncNumbers) {
+                    list.add(Integer.parseInt(numIncStr));
+                    numIncCount++;
+                }
+            }
+
+            count += numIncCount;
+            do {
+                int num = getRand();
+
+                if (checkDupExcludeNumber(num)) {
+                    continue;
+                }
+
+                if (isDuplicated(list, num)) {
+                    continue;
+                }
+
+                list.add(num);
+                count++;
+            } while (count < NUMBER_POOL_COUNT);
+
+            Collections.sort(list);
+            if (DEBUG) {
+                Log.d(TAG, "list:  " + list.toString());
+            }
+
+            if (!checkDuplicationList(mLottoList, list)) {
+                mGenList.add(list.toString()+"\n");
+                genNum++;
+            }
+
+            list.clear();
+        }
+
+        String genList = "";
+        for (int i=0; i<mNumToGen; i++) {
+            String data = "";
+            data = mGenList.get(i).replace("[", "");
+
+            data = data.replace("]", "");
+            data = data.replace(" ", "");
+
+            genList += data;
+        }
+
+        genList = GiftFromGodInfo.sortGenList(mNumToGen, genList, true);
+        mTV_out.append(genList);
+        GiftFromGodInfo.setCurGenList(genList);
+
+        mButtonAnalysis.setEnabled(true);
+    }
+
+    private void startWeightActivity() {
+        String winning_list_50 = "";
+
+        for (int i=0; i<mUseNumOfWinning; i++) {
+            winning_list_50 += mLottoList.get(i) + "\n";
+        }
+
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.setClassName("com.rayolla.mylotto", "com.rayolla.mylotto.WeightActivity");
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        i.putExtra("gen_list", mTV_out.getText().toString());
+        i.putExtra("winning_list", winning_list_50);
+        getApplicationContext().startActivity(i);
+    }
+
+    private void startAnalysisActivity() {
+        Log.d(TAG, "list: " + mTV_out.getText().toString());
+        String winning_list_50 = "";
+
+        for (int i=0; i<mUseNumOfWinning; i++) {
+            winning_list_50 += mLottoList.get(i) + "\n";
+        }
+
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.setClassName("com.rayolla.mylotto", "com.rayolla.mylotto.AnalysisActivity");
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        i.putExtra("gen_list", mTV_out.getText().toString());
+        i.putExtra("winning_list", winning_list_50);
+        getApplicationContext().startActivity(i);
+    }
+
     private void showFileChooser(int requestCode) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 //        intent.setType("*/*");
@@ -485,9 +499,6 @@ public class MainActivity extends AppCompatActivity {
                 gen += genList.get(i);
             }
         }
-
-        // FOR TEST
-//        gen = "10,23,29,33,37,40";
 
         if (DEBUG) {
             Log.d(TAG, "gen: " + gen);
