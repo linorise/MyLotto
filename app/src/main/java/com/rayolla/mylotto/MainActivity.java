@@ -488,6 +488,28 @@ public class MainActivity extends AppCompatActivity {
         return num;
     }
 
+    private String getListExceptElement(String list, int element) {
+        String[] numbers = list.split(",");
+        StringBuilder  newList = new StringBuilder();
+        int index = 0;
+        int index2 = 0;
+
+        for (String number : numbers) {
+            if (element != index) {
+                if (index2 < 5) {
+                    newList.append(number + ",");
+                }
+                else {
+                    newList.append(number);
+                }
+                index2++;
+            }
+            index++;
+        }
+
+        return newList.toString();
+    }
+
     private boolean checkDuplicationList(ArrayList<String> lottoList, List<Integer> genList) {
         String gen = "";
         for (int i=0; i<genList.size(); i++) {
@@ -508,9 +530,34 @@ public class MainActivity extends AppCompatActivity {
             String str = lottoList.get(i);
 //            Log.d(TAG, String.format("#%d> %s=%s", i, str, gen));
 
-            if (str.equals(gen)) {
-                Log.d(TAG, "Duplication found");
-                return true;
+            if (isIncludeBonus(str)) {
+                String newStr = checkIncludeBonus(str);
+                if (isDuplicated(newStr, gen)) {
+                    Log.d(TAG, "#1 Duplicated");
+                    return true;
+                }
+
+                // list of bonus number
+                // for example - 10,17,22,30,35,43,44
+                //   10,17,22,30,35,43(normal)
+                //   17,22,30,35,43,44 #1
+                //   10,22,30,35,43,44 #2
+                //   10,17,22,35,43,44 #3
+                //   10,17,22,30,43,44 #4
+                //   10,17,22,30,35,44 #5
+                for (int j=0; j<5; j++) {
+                    newStr = getListExceptElement(str, j);
+                    if (isDuplicated(newStr, gen)) {
+                        Log.d(TAG, "#2 Duplicated");
+                        return true;
+                    }
+                }
+            }
+            else {
+                if (isDuplicated(str, gen)) {
+                    Log.d(TAG, "#3 Duplicated");
+                    return true;
+                }
             }
         }
 
@@ -522,6 +569,14 @@ public class MainActivity extends AppCompatActivity {
             if (list.get(n) == num) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private boolean isDuplicated(String src, String gen) {
+        if (src.equals(gen)) {
+            return true;
         }
 
         return false;
@@ -541,6 +596,35 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+
+    private String checkIncludeBonus(String list) {
+        String[] numbers = list.split(",");
+        StringBuilder  newList = null;
+
+        int count = 1;
+        for (String number : numbers) {
+            if (newList == null) {
+                newList = new StringBuilder(number + ",");
+            }
+            else {
+                if (count == 7) {
+//                    Log.d(TAG, "Bonus number is included");
+                    break;
+                }
+
+                if (count < 6) {
+                    newList.append(number + ",");
+                }
+                else {
+                    newList.append(number);
+                }
+            }
+            count++;
+        }
+
+        return newList.toString();
     }
 
     private boolean checkDupExcludeNumber(int genNumber) {
