@@ -37,6 +37,13 @@
                 android:layout_marginStart="40dp">
 
                 <Button
+                    android:id="@+id/button_sort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sort" />
+
+                <Button
                     android:id="@+id/button_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -56,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Delete" />
+
             </LinearLayout>
         </LinearLayout>
 

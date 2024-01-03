@@ -38,16 +38,17 @@ public class AnalysisActivity extends AppCompatActivity {
 
     private EditText mET_include;
     private EditText mET_exclude;
+    private String mGenListStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.analysis);
 
-        String genList = getIntent().getStringExtra("gen_list");
+        mGenListStr = getIntent().getStringExtra("gen_list");
         String winningList = getIntent().getStringExtra("winning_list");
 
-        Log.d(TAG, "genList: " + genList);
+        Log.d(TAG, "mGenListStr: " + mGenListStr);
 //        Log.d(TAG, "winningList: " + winningList);
 
 //        GiftFromGodInfo.calculateWeight(winningList);
@@ -57,27 +58,26 @@ public class AnalysisActivity extends AppCompatActivity {
         mAnalysisView = (AnalysisView) findViewById(R.id.analysisview);
         mAnalysisView.setWinningList(winningList);
 
-        if (genList.length() > 0) {
-            String[] lines = genList.split("\n");
-            mGenList = lines;
-            int n = 0;
-            for (String line : lines) {
-                String dataStr = "";
-                if (n == 0) {
-                    mAnalysisView.setGeneratedList(line);
-                    dataStr = "<font color='#FF0000'>" + line + "</font><br>";
+        setTextGenList(mGenListStr);
 
-                    mFocus = n;
-                    mAnalysisView.setFocusedList(line);
-                    setWeightInfo(line);
+        Button button_sort = (Button)findViewById(R.id.button_sort);
+        button_sort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Sort generate lists by the weight");
+
+                String tmp = "";
+                String[] lines = mGenListStr.split("\n");
+                int len = lines.length;
+
+                for (int i=0; i<len; i++) {
+                    tmp += lines[len - 1 - i] + "\n";
                 }
-                else {
-                    dataStr = line + "<br>";
-                }
-                mTV_genlist.append(Html.fromHtml(dataStr, Html.FROM_HTML_MODE_COMPACT));
-                n++;
+
+                mGenListStr = tmp;
+                setTextGenList(mGenListStr);
             }
-        }
+        });
 
         Button button_next = (Button)findViewById(R.id.button_next);
         button_next.setOnClickListener(new View.OnClickListener() {
@@ -325,5 +325,31 @@ public class AnalysisActivity extends AppCompatActivity {
         Log.d(TAG, "set key: " + key + " value: " + value);
         editor.putString(key, value);
         editor.apply();
+    }
+
+    private void setTextGenList(String genList) {
+        if (genList.length() > 0) {
+            mTV_genlist.setText("");
+
+            String[] lines = genList.split("\n");
+            mGenList = lines;
+            int n = 0;
+            for (String line : lines) {
+                String dataStr = "";
+                if (n == 0) {
+                    mAnalysisView.setGeneratedList(line);
+                    dataStr = "<font color='#FF0000'>" + line + "</font><br>";
+
+                    mFocus = n;
+                    mAnalysisView.setFocusedList(line);
+                    setWeightInfo(line);
+                }
+                else {
+                    dataStr = line + "<br>";
+                }
+                mTV_genlist.append(Html.fromHtml(dataStr, Html.FROM_HTML_MODE_COMPACT));
+                n++;
+            }
+        }
     }
 }
