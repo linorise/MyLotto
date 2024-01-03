@@ -628,17 +628,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkDupExcludeNumber(int genNumber) {
-        String[] numbers = mExcludeNumber.split(",");
+        if (mExcludeNumber.length() > 0) {
+            String[] numbers = mExcludeNumber.split(",");
 
-        if (DEBUG) {
-            Log.d(TAG, "Exclude numbers: " + mExcludeNumber);
-        }
-
-        for (String numStr : numbers) {
-            if (genNumber == Integer.parseInt(numStr)) {
-                Log.d(TAG, genNumber + " is exclude number. Drop.");
-                return true;
+            if (DEBUG) {
+                Log.d(TAG, "Exclude numbers: " + mExcludeNumber);
             }
+
+            for (String numStr : numbers) {
+                if (genNumber == Integer.parseInt(numStr)) {
+                    Log.d(TAG, genNumber + " is exclude number. Drop.");
+                    return true;
+                }
+            }
+        }
+        else {
+            Log.d(TAG, "Exclude number is empty");
         }
 
         return false;
