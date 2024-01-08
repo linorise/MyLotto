@@ -171,10 +171,12 @@ public class AnalysisActivity extends AppCompatActivity {
                 mGenList = null;
                 mGenList = new String[count];
                 count = 0;
+                mGenListStr = "";
                 for (int i=0; i<tmpGenList.length; i++) {
                     if (tmpGenList[i].length() > 0) {
                         mGenList[count++] = tmpGenList[i];
                         tmpList += tmpGenList[i] + "\n";
+                        mGenListStr += tmpGenList[i] + "\n";
                     }
                 }
 
